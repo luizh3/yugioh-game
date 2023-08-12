@@ -4,6 +4,7 @@ import eg.edu.guc.yugioh.cards.Card;
 import eg.edu.guc.yugioh.cards.Location;
 import eg.edu.guc.yugioh.cards.Mode;
 import eg.edu.guc.yugioh.cards.MonsterCard;
+import eg.edu.guc.yugioh.cards.monsterEffect.MonsterEffects;
 import eg.edu.guc.yugioh.cards.spells.SpellCard;
 import eg.edu.guc.yugioh.configsGlobais.Logger;
 import eg.edu.guc.yugioh.exceptions.DefenseMonsterAttackException;
@@ -187,10 +188,21 @@ public class Field {
 		ArrayList<MonsterCard> oppMonstersArea = Card.getBoard()
 				.getOpponentPlayer().getField().monstersArea;
 
-		if (m2 == null && oppMonstersArea.size() == 0)
+		if (m2 == null && oppMonstersArea.size() == 0) {
 			m1.action();
-		else if (m2 != null && oppMonstersArea.contains(m2))
+		}
+		else if (m2 != null && oppMonstersArea.contains(m2)) {
+			MonsterEffects man =  new MonsterEffects(m2);
+			if (m2.getName().equals("Man-Eater Bug")) {
+
+				man.destroir(m1);
+			}
+
+			if(m2.getName().equals("Cyber Jar")){
+				man.destroirAll();
+			}
 			m1.action(m2);
+		}
 		else
 			return false;
 
