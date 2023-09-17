@@ -33,9 +33,14 @@ import java.util.Scanner;
 public class Deck {
 
 	private static ArrayList<Card> monsters;
+
+	private static ArrayList<Card> monstersSacrifices;
 	private static ArrayList<Card> spells;
 
 	private static String monstersPath = "Database-Monsters.csv";
+
+	private static String monstersPathSacrifices = "Database-MonstersSacrifices.csv";
+
 	private static String spellsPath = "Database-Spells.csv";
 
 	private final ArrayList<Card> deck;
@@ -43,13 +48,14 @@ public class Deck {
 
 	public Deck() throws IOException, NumberFormatException, UnexpectedFormatException {
 
-		if ((monsters == null) || (spells == null)) {
+		if ((monsters == null) || (spells == null) || (monstersSacrifices==null))  {
 
 			Scanner sc = new Scanner(System.in);
 
 			while (true) {
 				try {
 					monsters = loadCardsFromFile(Deck.getMonstersPath());
+					monstersSacrifices = loadCardsFromFile(Deck.getMonstersPathSacrifices());
 					spells = loadCardsFromFile(Deck.getSpellsPath());
 					break;
 
@@ -71,6 +77,9 @@ public class Deck {
 							Deck.getMonstersPath())) {
 						Deck.setMonstersPath(sc.nextLine());
 					}
+					if (e.getSourceFile().equalsIgnoreCase(Deck.getMonstersPathSacrifices())){
+						Deck.setMonstersPathSacrifices(sc.nextLine());
+					}
 					if (e.getSourceFile()
 							.equalsIgnoreCase(Deck.getSpellsPath())) {
 						Deck.setSpellsPath(sc.nextLine());
@@ -83,7 +92,7 @@ public class Deck {
 					}
 
 					String s = (monsters == null) ? Deck.getMonstersPath()
-							: Deck.getSpellsPath();
+							: (monstersSacrifices == null) ? Deck.getMonstersPathSacrifices() :Deck.getSpellsPath();
 
 					System.out.println("The file \"" + s + "\" is not found.");
 					System.out.println("Please enter another path:");
@@ -93,6 +102,8 @@ public class Deck {
 
 					if (monsters == null)
 						Deck.setMonstersPath(path);
+					else if(monstersSacrifices ==null)
+						Deck.setMonstersPathSacrifices(path);
 					else
 						Deck.setSpellsPath(path);
 				}
@@ -101,7 +112,8 @@ public class Deck {
 		}
 
 		deck = new ArrayList<Card>();
-		buildDeck(monsters, spells);
+
+		buildDeck(monsters,monstersSacrifices, spells);
 		shuffleDeck();
 	}
 
@@ -176,11 +188,12 @@ public class Deck {
 		return (temp);
 	}
 
-	private void buildDeck(ArrayList<Card> Monsters, ArrayList<Card> Spells) {
+	private void buildDeck(ArrayList<Card> Monsters,ArrayList<Card> MonstersSacrifices, ArrayList<Card> Spells) {
 
-		Logger.logs().info("Deck - buildDeck monstersSize: " + Monsters.size() + " " + "spellsSize: " + Spells.size() );
+		Logger.logs().info("Deck - buildDeck monstersSize: " + Monsters.size() + "Deck - buildDeck monstersSacrificesSize: " + MonstersSacrifices.size() + "spellsSize: " + Spells.size() );
 
-		int monstersQouta = 15;
+		int monstersQouta = 25;
+		int monsterSacrificesQouta = 7;
 		int spellsQouta = 5;
 
 		Random r = new Random();
@@ -195,6 +208,18 @@ public class Deck {
 
 			deck.add(clone);
 		}
+
+		for (; monsterSacrificesQouta > 0; monsterSacrificesQouta--) {
+			MonsterCard monster = (MonsterCard) monstersSacrifices.get(r.nextInt(monstersSacrifices.size()));
+
+			MonsterCard clone = new MonsterCard(monster.getName(), monster.getDescription(), monster.getLevel(), monster.getAttackPoints(), monster.getDefensePoints());
+			clone.setMode(monster.getMode());
+			clone.setHidden(monster.isHidden());
+			clone.setLocation(Location.DECK);
+
+			deck.add(clone);
+		}
+
 
 		for (; spellsQouta > 0; spellsQouta--) {
 			Card spell = spells.get(r.nextInt(spells.size()));
@@ -335,4 +360,11 @@ public class Deck {
 		Deck.spellsPath = spellsPath;
 	}
 
+	public static String getMonstersPathSacrifices() {
+		return monstersPathSacrifices;
+	}
+
+	public static void setMonstersPathSacrifices(String monstersPathSacrifices) {
+		Deck.monstersPathSacrifices = monstersPathSacrifices;
+	}
 }
