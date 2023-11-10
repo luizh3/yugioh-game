@@ -26,6 +26,7 @@ public class SpellsGrid extends JPanel {
 		validate();
 	}
 	public void updateSpellsArea() {
+
 		removeAll();
 		if(active){
 			spellsArea = Card.getBoard().getActivePlayer().getField().getSpellArea();

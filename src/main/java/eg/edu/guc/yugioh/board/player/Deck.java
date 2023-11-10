@@ -188,6 +188,22 @@ public class Deck {
 		return (temp);
 	}
 
+	private void addMonsterDeck(MonsterCard monster){
+		MonsterCard clone = new MonsterCard(monster.getName(), monster.getDescription(), monster.getLevel(), monster.getAttackPoints(), monster.getDefensePoints());
+		clone.setMode(monster.getMode());
+		clone.setHidden(monster.isHidden());
+		addClone(clone);
+	}
+
+	private void addClone(Card clone){
+		clone.setLocation(Location.DECK);
+		deck.add(clone);
+	}
+	private void addSpellDeck(SpellCard clone){
+		addClone(clone);
+	}
+
+
 	private void buildDeck(ArrayList<Card> Monsters,ArrayList<Card> MonstersSacrifices, ArrayList<Card> Spells) {
 
 		Logger.logs().info("Deck - buildDeck monstersSize: " + Monsters.size() + "Deck - buildDeck monstersSacrificesSize: " + MonstersSacrifices.size() + "spellsSize: " + Spells.size() );
@@ -200,24 +216,12 @@ public class Deck {
 
 		for (; monstersQouta > 0; monstersQouta--) {
 			MonsterCard monster = (MonsterCard) monsters.get(r.nextInt(monsters.size()));
-
-			MonsterCard clone = new MonsterCard(monster.getName(), monster.getDescription(), monster.getLevel(), monster.getAttackPoints(), monster.getDefensePoints());
-			clone.setMode(monster.getMode());
-			clone.setHidden(monster.isHidden());
-			clone.setLocation(Location.DECK);
-
-			deck.add(clone);
+			addMonsterDeck(monster);
 		}
 
 		for (; monsterSacrificesQouta > 0; monsterSacrificesQouta--) {
 			MonsterCard monster = (MonsterCard) monstersSacrifices.get(r.nextInt(monstersSacrifices.size()));
-
-			MonsterCard clone = new MonsterCard(monster.getName(), monster.getDescription(), monster.getLevel(), monster.getAttackPoints(), monster.getDefensePoints());
-			clone.setMode(monster.getMode());
-			clone.setHidden(monster.isHidden());
-			clone.setLocation(Location.DECK);
-
-			deck.add(clone);
+			addMonsterDeck(monster);
 		}
 
 
@@ -227,71 +231,61 @@ public class Deck {
 
 			if (spell instanceof CardDestruction) {
 				clone = new CardDestruction(spell.getName(), spell.getDescription());
-				clone.setLocation(Location.DECK);
-				deck.add(clone);
+				addSpellDeck(clone);
 				continue;
 			}
 
 			if (spell instanceof ChangeOfHeart) {
 				clone = new ChangeOfHeart(spell.getName(), spell.getDescription());
-				clone.setLocation(Location.DECK);
-				deck.add(clone);
+				addSpellDeck(clone);
 				continue;
 			}
 
 			if (spell instanceof DarkHole) {
 				clone = new DarkHole(spell.getName(), spell.getDescription());
-				clone.setLocation(Location.DECK);
-				deck.add(clone);
+				addSpellDeck(clone);
 				continue;
 			}
 
 			if (spell instanceof GracefulDice) {
 				clone = new GracefulDice(spell.getName(), spell.getDescription());
-				clone.setLocation(Location.DECK);
-				deck.add(clone);
+				addSpellDeck(clone);
 				continue;
 			}
 
 			if (spell instanceof HarpieFeatherDuster) {
 				clone = new HarpieFeatherDuster(spell.getName(), spell.getDescription());
-				clone.setLocation(Location.DECK);
-				deck.add(clone);
+				addSpellDeck(clone);
 				continue;
 			}
 
 			if (spell instanceof HeavyStorm) {
 				clone = new HeavyStorm(spell.getName(), spell.getDescription());
-				clone.setLocation(Location.DECK);
-				deck.add(clone);
+				addSpellDeck(clone);
 				continue;
 			}
 
 			if (spell instanceof MagePower) {
 				clone = new MagePower(spell.getName(), spell.getDescription());
-				clone.setLocation(Location.DECK);
-				deck.add(clone);
+				addSpellDeck(clone);
 				continue;
 			}
 
 			if (spell instanceof MonsterReborn) {
 				clone = new MonsterReborn(spell.getName(), spell.getDescription());
-				clone.setLocation(Location.DECK);
-				deck.add(clone);
+				addSpellDeck(clone);
 				continue;
 			}
 
 			if (spell instanceof PotOfGreed) {
 				clone = new PotOfGreed(spell.getName(), spell.getDescription());
-				clone.setLocation(Location.DECK);
-				deck.add(clone);
+				addSpellDeck(clone);
 				continue;
 			}
 
 			if (spell instanceof Raigeki) {
 				clone = new Raigeki(spell.getName(), spell.getDescription());
-				clone.setLocation(Location.DECK);
-				deck.add(clone);
+				addSpellDeck(clone);
 				continue;
 			}
 		}

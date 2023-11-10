@@ -16,7 +16,7 @@ public class MagePower extends SpellCard {
 		if(Card.getBoard().getOpponentPlayer().getField().getMonstersArea().contains(monster))
 			throw new IllegalSpellTargetException();
 		
-		int spellCardsCount = CardDestruction.getBoard().getActivePlayer()
+		int spellCardsCount = Card.getBoard().getActivePlayer()
 				.getField().getSpellArea().size();
 		
 		monster.setAttackPoints(monster.getAttackPoints()
