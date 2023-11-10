@@ -15,8 +15,6 @@ O objetivo é deixar esse game de Yugioh com melhores praticas de engenharia de 
 
 
 ## Alunos envolvidos:
-- Vinicius C. Lodi
-- Gabriel B. Refosco
-- João Vitor Zisch
-- Lucas Lenoch de Souza
+- Matheus Neves Oliveira
+- Siluane Zancanaro
 
