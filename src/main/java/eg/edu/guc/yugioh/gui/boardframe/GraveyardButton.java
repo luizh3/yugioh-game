@@ -16,6 +16,10 @@ import eg.edu.guc.yugioh.configsGlobais.Logger;
 public class GraveyardButton extends JButton implements ActionListener {
 	private static ImageIcon graveyard = new ImageIcon("images/Graveyard.png");
 	private boolean active ;
+	private JPanel painelPrincipalActive ;
+
+	private JPanel painelPrincipalOpponent;
+
 
 	public GraveyardButton(boolean active) {
 		super(graveyard);
@@ -60,19 +64,26 @@ public class GraveyardButton extends JButton implements ActionListener {
 			if (count > 0) {
 				Double quantidade = (double) (count / 5);
 				JFrame janela = new JFrame();
-				JPanel painelPrincipal = criarPanel(quantidade);
+				if(painelPrincipalActive==null){
+					painelPrincipalActive = criarPanel(quantidade);
+				}else{
+					painelPrincipalActive.removeAll();
+					painelPrincipalActive.revalidate();
+					painelPrincipalActive.repaint();
+				}
+
 				for (int i = 0; i < count; i++) {
 					Card card = Card.getBoard().getActivePlayer().getField().getGraveyard().get(i);
 					if (card instanceof MonsterCard) {
 						MonsterButton cardMonster = new MonsterButton((MonsterCard) card);
-						painelPrincipal.add(cardMonster.getName(), cardMonster);
+						painelPrincipalActive.add(cardMonster.getName(), cardMonster);
 					} else {
 						SpellButton spellButton = new SpellButton((SpellCard) card);
-						painelPrincipal.add(spellButton.getName(), spellButton);
+						painelPrincipalActive.add(spellButton.getName(), spellButton);
 					}
 
 				}
-				abrirPanel(painelPrincipal, janela);
+				abrirPanel(painelPrincipalActive, janela);
 			}
 
 		} else {
@@ -80,21 +91,28 @@ public class GraveyardButton extends JButton implements ActionListener {
 			if (count > 0) {
 				Double quantidade = (double) (count / 5);
 				JFrame janela = new JFrame();
+				if(painelPrincipalOpponent==null) {
+					painelPrincipalOpponent = criarPanel(quantidade);
+				}else{
+					painelPrincipalOpponent.removeAll();
+					painelPrincipalOpponent.revalidate();
+					painelPrincipalOpponent.repaint();
+				}
 
-				JPanel painelPrincipal = criarPanel(quantidade);
 				for (int i = 0; i < count; i++) {
 					Card card = Card.getBoard().getOpponentPlayer().getField().getGraveyard().get(i);
 					if (card instanceof MonsterCard) {
 						MonsterButton cardMonster = new MonsterButton((MonsterCard) card);
-						painelPrincipal.add(cardMonster.getName(), cardMonster);
+
+						painelPrincipalOpponent.add(cardMonster.getName(), cardMonster);
 					} else {
 						SpellButton spellButton = new SpellButton((SpellCard) card);
-						painelPrincipal.add(spellButton.getName(), spellButton);
+						painelPrincipalOpponent.add(spellButton.getName(), spellButton);
 					}
 
 				}
 
-				abrirPanel(painelPrincipal, janela);
+				abrirPanel(painelPrincipalOpponent, janela);
 			}
 		}
 
