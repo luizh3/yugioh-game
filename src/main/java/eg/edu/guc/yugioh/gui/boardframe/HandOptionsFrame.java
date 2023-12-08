@@ -112,7 +112,6 @@ public class HandOptionsFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 
 		Logger.logs().info("HandOptionsFrame - actionPerformed getActionCommand: " + e.getActionCommand());
-
 		if(e.getActionCommand().equals("Cancel")){
 			GUI.getBoardFrame().resetHandlers();
 		}else

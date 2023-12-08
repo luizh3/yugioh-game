@@ -10,6 +10,8 @@ import java.awt.GridBagLayout;
 public class FieldPanel extends JPanel {
 	private PlayerAreaPanel activePlayerPanel;
 	private PlayerAreaPanel opponentPlayerPanel;
+
+
 	
 	public FieldPanel(){
 		setLayout(new GridBagLayout());

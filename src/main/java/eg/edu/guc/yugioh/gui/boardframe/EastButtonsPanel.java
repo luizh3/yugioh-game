@@ -10,6 +10,8 @@ public class EastButtonsPanel extends JPanel {
 	private NextPhaseButton nextPhaseButton = new NextPhaseButton();
 	private EndTurnButton endTurnButton = new EndTurnButton();
 	private SwitchMonsterModeButton switchMonsterModeButton= new SwitchMonsterModeButton();
+
+
 	public EastButtonsPanel(){
 		setLayout(new GridBagLayout());
 		setOpaque(false);
@@ -21,6 +23,7 @@ public class EastButtonsPanel extends JPanel {
 		add(nextPhaseButton, c);
 		c.gridy =2;
 		add(endTurnButton, c);
+
 		validate();
 	}
 	

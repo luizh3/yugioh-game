@@ -4,6 +4,8 @@ import eg.edu.guc.yugioh.configsGlobais.Logger;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
@@ -16,7 +18,6 @@ public class DeckGraveyard extends JPanel {
 		setLayout(new BorderLayout());
 		graveyard = new GraveyardButton(active);
 		deck = new DeckButton(active);
-
 		Logger.logs().info("DeckGraveyard - DeckGraveyard active: " + active);
 
 		if(!active){
@@ -29,6 +30,7 @@ public class DeckGraveyard extends JPanel {
 		setPreferredSize(new Dimension(CardButton.getDimension('W'),300));
 		validate();
 	}
+
 
 	public GraveyardButton getGraveyard() {
 		return graveyard;
@@ -45,4 +47,5 @@ public class DeckGraveyard extends JPanel {
 	public void setDeck(DeckButton deck) {
 		this.deck = deck;
 	}
+
 }
