@@ -21,7 +21,8 @@ public class PlayerNamePanel extends JPanel {
 	public PlayerNamePanel(boolean active) {
 		this.active = active;
 		setLayout(new BorderLayout());
-		setOpaque(false);
+		setOpaque(true); // Ativar opacidade para que o fundo seja visível
+                setBackground(Color.DARK_GRAY); // Definir fundo cinza escuro
 		setPreferredSize(new Dimension(200,200));
 		addPanels();
 		validate();
