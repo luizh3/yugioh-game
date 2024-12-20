@@ -3,14 +3,13 @@ package eg.edu.guc.yugioh.gui.boardframe;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import eg.edu.guc.yugioh.cards.MonsterCard;
 import eg.edu.guc.yugioh.cards.spells.SpellCard;
 import eg.edu.guc.yugioh.configsGlobais.Logger;
+import eg.edu.guc.yugioh.gui.Main;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,22 +17,22 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 @SuppressWarnings("serial")
-public class BoardFrame extends JFrame implements ActionListener{
+public class BoardFrame extends JFrame implements ActionListener {
 	private FieldPanel fieldPanel;
 	private HandPanel opponentHandPanel;
 	private HandPanel activeHandPanel;
 	private WestImagesPanel westImagesPanel;
 	private EastButtonsPanel eastButtonsPanel;
-	
+
 	private MonsterCard attackingMonster;
 	private boolean toSwitch = false;
 	private SpellCard spellToActivate;
-	private boolean sacrificeAttack ;
+	private boolean sacrificeAttack;
 	private ArrayList<MonsterCard> sacrificedMonsters = new ArrayList<MonsterCard>();
 	private int sacrificesCount;
 	private MonsterCard monsterToSummon;
 
-	public BoardFrame(){
+	public BoardFrame() {
 		super("Yu-Gi-Oh!");
 		setFramePrefrences();
 		initializeAttributes();
@@ -41,42 +40,46 @@ public class BoardFrame extends JFrame implements ActionListener{
 		validate();
 	}
 
-	private void setFramePrefrences(){
+	private void setFramePrefrences() {
 		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1367, 792);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-//		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);		
-//		setUndecorated(true);
-		setVisible(true);	
+		setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+		// setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+		// setUndecorated(true);
+		setVisible(true);
 		setResizable(false);
 	}
 
-	private void initializeAttributes(){
+	private void initializeAttributes() {
 
 		fieldPanel = new FieldPanel();
 		activeHandPanel = new HandPanel(true);
 		opponentHandPanel = new HandPanel(false);
-		opponentHandPanel.setPreferredSize(new Dimension(activeHandPanel.getPreferredSize().width,15));
+		opponentHandPanel.setPreferredSize(new Dimension(activeHandPanel.getPreferredSize().width, 15));
 		westImagesPanel = new WestImagesPanel();
-		eastButtonsPanel =new EastButtonsPanel();
+		eastButtonsPanel = new EastButtonsPanel();
+		eastButtonsPanel.getRestartGameButton().addActionListener(e -> {
+			dispose();
+			                 Main.startNewGame();
+		});
 	}
 
-	private void addPanels(){
+	private void addPanels() {
 		setContentPane(new JLabel(new ImageIcon("images/background.jpg")));
 		JPanel dataPanel = new JPanel();
 		dataPanel.setLayout(new BorderLayout());
 		dataPanel.setOpaque(false);
-		dataPanel.setSize(1366,768);
-		dataPanel.add(opponentHandPanel,BorderLayout.NORTH);
+		dataPanel.setSize(1366, 768);
+		dataPanel.add(opponentHandPanel, BorderLayout.NORTH);
 		dataPanel.add(fieldPanel, BorderLayout.CENTER);
-		dataPanel.add(activeHandPanel,BorderLayout.SOUTH);
-		dataPanel.add(eastButtonsPanel,BorderLayout.EAST);
-		dataPanel.add(westImagesPanel,BorderLayout.WEST);
+		dataPanel.add(activeHandPanel, BorderLayout.SOUTH);
+		dataPanel.add(eastButtonsPanel, BorderLayout.EAST);
+		dataPanel.add(westImagesPanel, BorderLayout.WEST);
 		add(dataPanel);
 	}
-	
+
 	public FieldPanel getFieldPanel() {
 		return fieldPanel;
 	}
@@ -119,22 +122,22 @@ public class BoardFrame extends JFrame implements ActionListener{
 
 	public void updateBoardFrame() {
 
-			Logger.logs().info("BoardFrame - updateBoardFrame");
+		Logger.logs().info("BoardFrame - updateBoardFrame");
 
-			activeHandPanel.updateHand();
-			opponentHandPanel.updateHand();
-			fieldPanel.getActivePlayerPanel().getDeckGraveyardPanel().getDeck().updateDeck();
-			fieldPanel.getOpponentPlayerPanel().getDeckGraveyardPanel().getDeck().updateDeck();
-			fieldPanel.getActivePlayerPanel().getDeckGraveyardPanel().getGraveyard().updateGraveyard();
-			fieldPanel.getOpponentPlayerPanel().getDeckGraveyardPanel().getGraveyard().updateGraveyard();
-			fieldPanel.getActivePlayerPanel().getMonsterSpellPanel().getMonstersGrid().updateMonstersArea();
-			fieldPanel.getOpponentPlayerPanel().getMonsterSpellPanel().getMonstersGrid().updateMonstersArea();
-			fieldPanel.getActivePlayerPanel().getMonsterSpellPanel().getSpellsGrid().updateSpellsArea();
-			fieldPanel.getOpponentPlayerPanel().getMonsterSpellPanel().getSpellsGrid().updateSpellsArea();
-			fieldPanel.getActivePlayerPanel().getPlayerNamePanel().updateLifePoints();
-			fieldPanel.getOpponentPlayerPanel().getPlayerNamePanel().updateLifePoints();
-			repaint();
-			validate();
+		activeHandPanel.updateHand();
+		opponentHandPanel.updateHand();
+		fieldPanel.getActivePlayerPanel().getDeckGraveyardPanel().getDeck().updateDeck();
+		fieldPanel.getOpponentPlayerPanel().getDeckGraveyardPanel().getDeck().updateDeck();
+		fieldPanel.getActivePlayerPanel().getDeckGraveyardPanel().getGraveyard().updateGraveyard();
+		fieldPanel.getOpponentPlayerPanel().getDeckGraveyardPanel().getGraveyard().updateGraveyard();
+		fieldPanel.getActivePlayerPanel().getMonsterSpellPanel().getMonstersGrid().updateMonstersArea();
+		fieldPanel.getOpponentPlayerPanel().getMonsterSpellPanel().getMonstersGrid().updateMonstersArea();
+		fieldPanel.getActivePlayerPanel().getMonsterSpellPanel().getSpellsGrid().updateSpellsArea();
+		fieldPanel.getOpponentPlayerPanel().getMonsterSpellPanel().getSpellsGrid().updateSpellsArea();
+		fieldPanel.getActivePlayerPanel().getPlayerNamePanel().updateLifePoints();
+		fieldPanel.getOpponentPlayerPanel().getPlayerNamePanel().updateLifePoints();
+		repaint();
+		validate();
 	}
 
 	public boolean isToSwitch() {
@@ -153,7 +156,6 @@ public class BoardFrame extends JFrame implements ActionListener{
 		this.spellToActivate = spellToActivate;
 	}
 
-	
 	public int getSacrificesCount() {
 		return sacrificesCount;
 	}
@@ -161,7 +163,7 @@ public class BoardFrame extends JFrame implements ActionListener{
 	public void setSacrificesCount(int sacrificesCount) {
 		this.sacrificesCount = sacrificesCount;
 	}
-	
+
 	public void decrementSacrificesCount() {
 		this.sacrificesCount--;
 	}
@@ -207,8 +209,8 @@ public class BoardFrame extends JFrame implements ActionListener{
 		spellToActivate = null;
 		sacrificeAttack = false;
 		sacrificedMonsters = new ArrayList<MonsterCard>();
-		sacrificesCount=0;
-		monsterToSummon=null;
+		sacrificesCount = 0;
+		monsterToSummon = null;
 	}
 
 	@Override

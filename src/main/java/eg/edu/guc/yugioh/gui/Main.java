@@ -9,14 +9,14 @@ import eg.edu.guc.yugioh.configsGlobais.Logger;
 public class Main {
 	@SuppressWarnings("unused")
 
-	public static void startNewGame(){
+	public static void startNewGame() {
 
 		Logger.logs().info("Main - startNewGame");
 
 		Board b = new Board();
 		GUI g = new GUI();
 	}
-	
+
 	public static void main(String[] args) {
 		startNewGame();
 	}
