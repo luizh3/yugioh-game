@@ -3,6 +3,9 @@ package eg.edu.guc.yugioh.gui.boardframe;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import java.awt.Color;
+import java.awt.Font;
+
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
@@ -26,8 +29,16 @@ public class EastButtonsPanel extends JPanel {
 		add(endTurnButton, c);
 		c.gridy = 3;
 		add(restartGameButton, c);
+		styleButton(restartGameButton);
 
 		validate();
+	}
+
+	private void styleButton(JButton button) {
+		button.setFocusPainted(false);
+		button.setBackground(Color.DARK_GRAY);
+		button.setForeground(Color.WHITE);
+		button.setFont(button.getFont().deriveFont(Font.BOLD, 14f));
 	}
 
 	public NextPhaseButton getNextPhaseButton() {

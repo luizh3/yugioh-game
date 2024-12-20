@@ -93,11 +93,9 @@ public class HandOptionsFrame extends JFrame implements ActionListener {
 
         setVisible(true);
     }
-    
-
 
     private void styleButtons() {
-        JButton[] buttons = {leftButton, rightButton, cancelButton};
+        JButton[] buttons = { leftButton, rightButton, cancelButton };
         for (JButton button : buttons) {
             button.setFocusPainted(false);
             button.setBackground(Color.DARK_GRAY);

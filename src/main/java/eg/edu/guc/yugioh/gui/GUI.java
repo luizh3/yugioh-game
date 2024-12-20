@@ -10,22 +10,22 @@ public class GUI {
 	private static PlayersFrame playerFrame;
 	private static WinnerFrame winnerFrame;
 	private static BoardFrame boardFrame;
-	
-	public GUI(){
+
+	public GUI() {
 		GUI.playerFrame = new PlayersFrame();
 	}
-	
-	public static void errorFrame(Exception e){
-		if(Card.getBoard().isGameOver()) // bug fix
+
+	public static void errorFrame(Exception e) {
+		if (Card.getBoard().isGameOver()) // bug fix
 			return;
 		try {
 			new ErrorFrame(e.getMessage());
-		} catch (IOException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
 			System.exit(0);
 		}
 	}
-	
+
 	public static WinnerFrame getWinnerFrame() {
 		return winnerFrame;
 	}
@@ -37,6 +37,7 @@ public class GUI {
 	public static PlayersFrame getPlayerFrame() {
 		return playerFrame;
 	}
+
 	public static void setPlayerFrame(PlayersFrame player) {
 		GUI.playerFrame = player;
 	}

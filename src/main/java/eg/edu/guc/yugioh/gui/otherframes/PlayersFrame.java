@@ -2,6 +2,7 @@ package eg.edu.guc.yugioh.gui.otherframes;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -57,8 +58,17 @@ public class PlayersFrame extends JFrame implements ActionListener {
         c.insets.bottom = 0;
         DataPanel.add(playerButton, c);
 
+        styleButton(playerButton);
+
         add(DataPanel);
         validate();
+    }
+
+    private void styleButton(JButton button) {
+        button.setFocusPainted(false);
+        button.setBackground(Color.DARK_GRAY);
+        button.setForeground(Color.WHITE);
+        button.setFont(button.getFont().deriveFont(Font.BOLD, 14f));
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -66,8 +76,10 @@ public class PlayersFrame extends JFrame implements ActionListener {
         String name2 = player2Panel.getNameField().getText().trim();
 
         // Verifica se os campos estão vazios e define nomes padrão
-        if (name1.isEmpty()) name1 = "Player 1";
-        if (name2.isEmpty()) name2 = "Player 2";
+        if (name1.isEmpty())
+            name1 = "Player 1";
+        if (name2.isEmpty())
+            name2 = "Player 2";
 
         Player p1 = null, p2 = null;
         try {
