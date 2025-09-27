@@ -1,12 +1,13 @@
 package eg.edu.guc.yugioh.gui.boardframe;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import eg.edu.guc.yugioh.board.player.Phase;
 import eg.edu.guc.yugioh.cards.Card;
@@ -20,72 +21,152 @@ public class PlayerNamePanel extends JPanel {
 
 	public PlayerNamePanel(boolean active) {
 		this.active = active;
-		setLayout(new BorderLayout());
-		setOpaque(true); // Ativar opacidade para que o fundo seja visível
-                setBackground(Color.DARK_GRAY); // Definir fundo cinza escuro
-		setPreferredSize(new Dimension(200,200));
+
+		setOpaque(false);
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setPreferredSize(new Dimension(200, 120));
+
 		addPanels();
 		validate();
 	}
 
 	private void addPanels() {
-		add(currentPhaseLabel,BorderLayout.SOUTH);
-		add(lifePointsLabel,BorderLayout.CENTER);
-		add(playerNameLabel, BorderLayout.NORTH);
-		lifePointsLabel.setPreferredSize(new Dimension(50,35));
-		lifePointsLabel.setFont(new Font("Cambria",Font.ITALIC | Font.BOLD,30));
-		lifePointsLabel.setForeground(Color.WHITE);
-		playerNameLabel.setPreferredSize(new Dimension(50,35));
-		playerNameLabel.setFont(new Font("Cambria",Font.ITALIC | Font.BOLD,30));
-		playerNameLabel.setForeground(Color.WHITE);
-		currentPhaseLabel.setPreferredSize(new Dimension(50,35));
-		currentPhaseLabel.setFont(new Font("Cambria",Font.ITALIC | Font.BOLD,30));
-		currentPhaseLabel.setForeground(Color.WHITE);
+
+		adjustPlayerNameLabel();
+		adjustLifePointsLabel();
+		adjustCurrentPhaseLabel();
+
+		addLabels();
+
 		updateAll();
+	}
+
+	public void adjustPlayerNameLabel() {
+		playerNameLabel.setFont(new Font("Cambria", Font.ITALIC | Font.BOLD, 20));
+		playerNameLabel.setForeground(Color.BLACK);
+		playerNameLabel.setOpaque(true);
+		playerNameLabel.setBackground(new Color(255, 255, 255, 255));
+		playerNameLabel.setBorder(new EmptyBorder(5, 10, 5, 10));
+		playerNameLabel.setAlignmentX(LEFT_ALIGNMENT);
+		playerNameLabel.setMaximumSize(new Dimension(190, 35));
+		LineBorder line = new LineBorder(new Color(255, 255, 255, 128), 2);
+		EmptyBorder margin = new EmptyBorder(5, 10, 5, 10);
+		playerNameLabel.setBorder(new CompoundBorder(line, margin));
+	}
+
+	public void adjustCurrentPhaseLabel() {
+		currentPhaseLabel.setFont(new Font("Cambria", Font.ITALIC | Font.BOLD, 20));
+		currentPhaseLabel.setForeground(Color.WHITE);
+		currentPhaseLabel.setOpaque(true);
+		currentPhaseLabel.setBackground(new Color(0, 0, 0, 128));
+		currentPhaseLabel.setBorder(new EmptyBorder(5, 10, 5, 10));
+		currentPhaseLabel.setAlignmentX(LEFT_ALIGNMENT);
+		currentPhaseLabel.setMaximumSize(new Dimension(120, 35));
+	}
+
+	public void adjustLifePointsLabel() {
+
+		lifePointsLabel.setFont(new Font("Cambria", Font.BOLD, 20));
+		lifePointsLabel.setForeground(Color.WHITE);
+		lifePointsLabel.setOpaque(true);
+		lifePointsLabel.setAlignmentX(LEFT_ALIGNMENT);
+		lifePointsLabel.setMaximumSize(new Dimension(150, 35));
+		lifePointsLabel.setBorder(new EmptyBorder(5, 10, 5, 10));
+	}
+
+	public void addLabelsCrescentOrder() {
+		add(currentPhaseLabel);
+		add(Box.createRigidArea(new Dimension(0, 0)));
+		add(lifePointsLabel);
+		add(Box.createRigidArea(new Dimension(0, 0)));
+		add(playerNameLabel);
+	}
+
+	public void addLabelsDescentOrder() {
+		add(playerNameLabel);
+		add(Box.createRigidArea(new Dimension(0, 0)));
+		add(lifePointsLabel);
+		add(Box.createRigidArea(new Dimension(0, 0)));
+		add(currentPhaseLabel);
+	}
+
+	public void addLabels() {
+
+		if( active ) {
+			addLabelsCrescentOrder();
+			return;
+		}
+
+		addLabelsDescentOrder();
 	}
 
 	public JLabel getplayerNameLabel() {
 		return playerNameLabel;
 	}
 
-
 	public JLabel getlifePointsLabel() {
 		return lifePointsLabel;
 	}
 
-
 	public JLabel getCurrentPhaseLabel() {
 		return currentPhaseLabel;
 	}
-	
-	public void updateAll(){
+
+	public void updateAll() {
 		updatePhase();
 		updatePlayerName();
 		updateLifePoints();
+		updateColorHud();
 	}
-	
-	public void updatePhase(){
+
+	public void updatePhase() {
 		Phase current = Card.getBoard().getActivePlayer().getField().getPhase();
-		if(current.equals(Phase.MAIN1))
+		if (current.equals(Phase.MAIN1))
 			currentPhaseLabel.setText("Main 1");
-		if(current.equals(Phase.MAIN2))
+		if (current.equals(Phase.MAIN2))
 			currentPhaseLabel.setText("Main 2");
-		if(current.equals(Phase.BATTLE))
+		if (current.equals(Phase.BATTLE))
 			currentPhaseLabel.setText("Battle");
-		if(!active){
+		if (!active) {
 			currentPhaseLabel.setText("Inactive");
 		}
 	}
-	
-	public void updatePlayerName(){
-		if(active)
-		playerNameLabel.setText(Card.getBoard().getActivePlayer().getName());
-		else playerNameLabel.setText(Card.getBoard().getOpponentPlayer().getName());
+
+	public void updateColorHud() {
+
+		if (active)
+			lifePointsLabel.setBackground(Card.getBoard().getActivePlayer().getColorHud());
+		else
+			lifePointsLabel.setBackground(Card.getBoard().getOpponentPlayer().getColorHud());
+
 	}
-	
-	public void updateLifePoints(){
-		if(active)
-			lifePointsLabel.setText(""+Card.getBoard().getActivePlayer().getLifePoints());
-		else lifePointsLabel.setText(""+Card.getBoard().getOpponentPlayer().getLifePoints());
+
+	public void updatePlayerName() {
+		if (active)
+			playerNameLabel.setText(Card.getBoard().getActivePlayer().getName());
+		else
+			playerNameLabel.setText(Card.getBoard().getOpponentPlayer().getName());
+	}
+
+	public void updateLifePoints() {
+		if (active)
+			lifePointsLabel.setText("HP " + Card.getBoard().getActivePlayer().getLifePoints());
+		else
+			lifePointsLabel.setText("HP " + Card.getBoard().getOpponentPlayer().getLifePoints());
+	}
+
+	// 🔹 Teste isolado
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Teste PlayerNamePanel");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(400, 200);
+
+		PlayerNamePanel panel = new PlayerNamePanel(true);
+		panel.getplayerNameLabel().setText("Jogador 1");
+		panel.getlifePointsLabel().setText("HP 8000");
+		panel.getCurrentPhaseLabel().setText("Main 1");
+
+		frame.add(panel);
+		frame.setVisible(true);
 	}
 }

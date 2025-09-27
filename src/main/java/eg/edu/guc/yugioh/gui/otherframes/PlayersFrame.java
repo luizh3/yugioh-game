@@ -83,8 +83,8 @@ public class PlayersFrame extends JFrame implements ActionListener {
 
         Player p1 = null, p2 = null;
         try {
-            p1 = new Player(name1);
-            p2 = new Player(name2);
+            p1 = new Player(name1, new Color( 255, 0, 0, 128), "images/YugiDuel.jpg");
+            p2 = new Player(name2, new Color( 0, 0, 255, 128), "images/KaibaDuel.jpg");
             Card.getBoard().startGame(p1, p2);
             GUI.setBoardFrame(new BoardFrame());
         } catch (IOException | UnexpectedFormatException e1) {

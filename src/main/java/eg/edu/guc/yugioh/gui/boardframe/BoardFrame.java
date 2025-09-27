@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import eg.edu.guc.yugioh.cards.MonsterCard;
 import eg.edu.guc.yugioh.cards.spells.SpellCard;
@@ -74,9 +75,17 @@ public class BoardFrame extends JFrame implements ActionListener {
 		dataPanel.setSize(1366, 768);
 		dataPanel.add(opponentHandPanel, BorderLayout.NORTH);
 		dataPanel.add(fieldPanel, BorderLayout.CENTER);
-		dataPanel.add(activeHandPanel, BorderLayout.SOUTH);
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 48, 0));
+		panel.add(westImagesPanel);
+		panel.add(activeHandPanel);
+		panel.setOpaque(true);
+		panel.setBackground(new Color(0, 0, 0,0));
+		panel.setBorder(new EmptyBorder(0, 105, 0, 0));
+
+		dataPanel.add(panel, BorderLayout.SOUTH);
 		dataPanel.add(eastButtonsPanel, BorderLayout.EAST);
-		dataPanel.add(westImagesPanel, BorderLayout.WEST);
 		add(dataPanel);
 	}
 

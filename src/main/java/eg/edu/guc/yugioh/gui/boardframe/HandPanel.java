@@ -19,7 +19,7 @@ public class HandPanel extends JPanel {
 	public HandPanel(boolean active) {
 		this.active = active;
 		setLayout(new FlowLayout());
-		setPreferredSize(new Dimension(1300,CardButton.getDimension('H')));
+		setPreferredSize(new Dimension(700,CardButton.getDimension('H')));
 		setOpaque(false);
 		updateHand();
 		validate();

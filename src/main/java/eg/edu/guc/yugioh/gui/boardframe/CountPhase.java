@@ -15,7 +15,7 @@ public class CountPhase extends JPanel {
         this.active = active;
         setLayout(new BorderLayout());
         setOpaque(false);
-        setPreferredSize(new Dimension(200,55));
+        setPreferredSize(new Dimension(125,55));
         addPanels();
         validate();
     }
@@ -23,9 +23,10 @@ public class CountPhase extends JPanel {
     private void addPanels() {
         add(CountPhase,BorderLayout.WEST);
 
-        CountPhase.setPreferredSize(new Dimension(200,55));
-        CountPhase.setFont(new Font("Cambria",Font.ITALIC,50));
+        CountPhase.setPreferredSize(new Dimension(150,55));
+        CountPhase.setFont(new Font("Cambria",Font.BOLD,36));
         CountPhase.setForeground(Color.WHITE);
+        CountPhase.setBackground(new Color(0,0,0,128));
         CountPhase.setText(String.valueOf(" Turn " + String.valueOf(this.active/2)));
     }
 

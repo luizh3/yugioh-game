@@ -1,29 +1,71 @@
 package eg.edu.guc.yugioh.gui.boardframe;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import javax.swing.JPanel;
+import eg.edu.guc.yugioh.cards.Card;
+
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class PlayerAreaPanel extends JPanel {
 	private MonstersSpellsPanel monsterSpellPanel;
 	private DeckGraveyard deckGraveyardPanel;
 	private PlayerNamePanel playerNamePanel;
+	private final JLabel activeImage;
+	private final boolean active;
 
 	public PlayerAreaPanel(boolean ao){
 		super();
 		setOpaque(false);
+		active = ao;
 		monsterSpellPanel = new MonstersSpellsPanel(ao);
 		deckGraveyardPanel = new DeckGraveyard(ao);
+
+		JPanel containerLabel = new JPanel();
+		containerLabel.setOpaque(false);
+		containerLabel.setLayout(new BoxLayout(containerLabel, BoxLayout.X_AXIS));
+
 		playerNamePanel = new PlayerNamePanel(ao);
-		add(playerNamePanel, BorderLayout.WEST);
+		activeImage = new JLabel();
+		updatePlayerImage();
+
+		containerLabel.add(activeImage);
+		containerLabel.add(playerNamePanel);
+
+		add(containerLabel, BorderLayout.WEST);
 		add(monsterSpellPanel,BorderLayout.CENTER);
 		add(deckGraveyardPanel,BorderLayout.EAST);
 		setPreferredSize(new Dimension(900,320));
 		validate();
-		
+
 	}
-	
+
+	public void updatePlayerImage() {
+
+		if (active) {
+			activeImage.setIcon(resizeIcon(Card.getBoard().getActivePlayer().getImagePath(), 100, 100));
+			activeImage.setBorder(new LineBorder(Card.getBoard().getActivePlayer().getColorHud(), 3));
+			return;
+		}
+
+		activeImage.setIcon(resizeIcon(Card.getBoard().getOpponentPlayer().getImagePath(), 100, 100));
+		activeImage.setBorder(new LineBorder(Card.getBoard().getOpponentPlayer().getColorHud(), 3));
+
+	}
+
+	public void updateAll() {
+
+		playerNamePanel.updateAll();
+		updatePlayerImage();
+
+	}
+
+	private ImageIcon resizeIcon(String path, int width, int height) {
+		ImageIcon icon = new ImageIcon(path);
+		Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		return new ImageIcon(img);
+	}
+
 	public MonstersSpellsPanel getMonsterSpellPanel() {
 		return monsterSpellPanel;
 	}

@@ -1,12 +1,12 @@
 package eg.edu.guc.yugioh.board.player;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.swing.JOptionPane;
 
 import eg.edu.guc.yugioh.cards.Card;
 import eg.edu.guc.yugioh.cards.Mode;
@@ -16,8 +16,6 @@ import eg.edu.guc.yugioh.configsGlobais.Logger;
 import eg.edu.guc.yugioh.exceptions.IllegalSpellTargetException;
 import eg.edu.guc.yugioh.exceptions.MultipleMonsterAdditionException;
 import eg.edu.guc.yugioh.exceptions.UnexpectedFormatException;
-import eg.edu.guc.yugioh.configsGlobais.Logger;
-
 
 public class Player implements Duelist {
 
@@ -25,12 +23,32 @@ public class Player implements Duelist {
 	private int lifePoints;
 	private Field field;
 	private boolean addedMonsterThisTurn;
+	private Color colorHud;
+	private String imagePath;
 
-	public Player(String name) throws IOException, UnexpectedFormatException {
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	public Color getColorHud() {
+		return colorHud;
+	}
+
+	public void setColorHud(Color colorHud) {
+		this.colorHud = colorHud;
+	}
+
+	public Player(String name, Color colorHud, String imagePath ) throws IOException, UnexpectedFormatException {
 
 		this.name = name;
 		this.lifePoints = 8000;
 		this.field = new Field();
+		this.colorHud = colorHud;
+		this.imagePath = imagePath;
 		addedMonsterThisTurn = false;
 
 	}

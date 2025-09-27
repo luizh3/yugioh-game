@@ -11,13 +11,11 @@ public class FieldPanel extends JPanel {
 	private PlayerAreaPanel activePlayerPanel;
 	private PlayerAreaPanel opponentPlayerPanel;
 
-
-	
 	public FieldPanel(){
 		setLayout(new GridBagLayout());
 		setPreferredSize(new Dimension(700,700));
-		activePlayerPanel = new PlayerAreaPanel(true);  
-		opponentPlayerPanel = new PlayerAreaPanel(false); 
+		activePlayerPanel = new PlayerAreaPanel(true);
+		opponentPlayerPanel = new PlayerAreaPanel(false);
 		setOpaque(false);
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.PAGE_START;
@@ -27,7 +25,7 @@ public class FieldPanel extends JPanel {
 		add(activePlayerPanel , c);
 		validate();
 	}
-	
+
 	public PlayerAreaPanel getActivePlayerPanel() {
 		return activePlayerPanel;
 	}
