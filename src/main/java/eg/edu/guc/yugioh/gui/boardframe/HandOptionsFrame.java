@@ -13,7 +13,7 @@ import eg.edu.guc.yugioh.cards.spells.MagePower;
 import eg.edu.guc.yugioh.cards.spells.SpellCard;
 import eg.edu.guc.yugioh.configsGlobais.Logger;
 import eg.edu.guc.yugioh.gui.GUI;
-import eg.edu.guc.yugioh.gui.otherframes.AnimationFrame;
+import eg.edu.guc.yugioh.gui.otherframes.AnimationPanel;
 
 @SuppressWarnings("serial")
 public class HandOptionsFrame extends JFrame implements ActionListener {
@@ -150,7 +150,8 @@ public class HandOptionsFrame extends JFrame implements ActionListener {
             GUI.getBoardFrame().setSpellToActivate(null);
             GUI.getBoardFrame().setMonsterToSummon(null);
         }
-        new AnimationFrame().AnimationAsk();
+
+        GUI.getBoardFrame().openAnimationPanel(AnimationGIF.getSpellAnimation());
     }
 
     private void handleSetSpell() throws Exception {

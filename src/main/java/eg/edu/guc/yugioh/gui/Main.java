@@ -8,7 +8,6 @@ import eg.edu.guc.yugioh.configsGlobais.Logger;
 
 public class Main {
 	@SuppressWarnings("unused")
-
 	public static void startNewGame() {
 
 		Logger.logs().info("Main - startNewGame");
