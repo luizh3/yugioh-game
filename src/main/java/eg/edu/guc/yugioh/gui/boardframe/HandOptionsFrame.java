@@ -13,7 +13,6 @@ import eg.edu.guc.yugioh.cards.spells.MagePower;
 import eg.edu.guc.yugioh.cards.spells.SpellCard;
 import eg.edu.guc.yugioh.configsGlobais.Logger;
 import eg.edu.guc.yugioh.gui.GUI;
-import eg.edu.guc.yugioh.gui.otherframes.AnimationPanel;
 
 @SuppressWarnings("serial")
 public class HandOptionsFrame extends JFrame implements ActionListener {
@@ -141,17 +140,28 @@ public class HandOptionsFrame extends JFrame implements ActionListener {
     }
 
     private void activateSpellCard() throws Exception {
-        if (spell instanceof ChangeOfHeart || spell instanceof MagePower) {
-            new ConfirmFrame("Please click a monster to activate on");
-            GUI.getBoardFrame().setSpellToActivate(spell);
-            GUI.getBoardFrame().setMonsterToSummon(null);
-        } else {
-            Card.getBoard().getActivePlayer().activateSpell(spell, null);
-            GUI.getBoardFrame().setSpellToActivate(null);
-            GUI.getBoardFrame().setMonsterToSummon(null);
-        }
 
-        GUI.getBoardFrame().openAnimationPanel(AnimationGIF.getSpellAnimation());
+        // Open animation and delay the next steps until it finishes
+        GUI.getBoardFrame().openAnimationPanel(AnimationGIF.getSpellAnimation(), new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (spell instanceof ChangeOfHeart || spell instanceof MagePower) {
+                        new ConfirmFrame("Please click a monster to activate on");
+                        GUI.getBoardFrame().setSpellToActivate(spell);
+                        GUI.getBoardFrame().setMonsterToSummon(null);
+                    } else {
+                        Card.getBoard().getActivePlayer().activateSpell(spell, null);
+                        GUI.getBoardFrame().setSpellToActivate(null);
+                        GUI.getBoardFrame().setMonsterToSummon(null);
+                    }
+                } catch (Exception ex) {
+                    GUI.errorFrame(ex);
+                } finally {
+                    GUI.getBoardFrame().updateBoardFrame();
+                }
+            }
+        });
     }
 
     private void handleSetSpell() throws Exception {

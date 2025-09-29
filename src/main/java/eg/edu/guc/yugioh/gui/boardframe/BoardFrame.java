@@ -21,6 +21,7 @@ public class BoardFrame extends JFrame implements ActionListener {
     private HandPanel activeHandPanel;
     private WestImagesPanel westImagesPanel;
     private EastButtonsPanel eastButtonsPanel;
+    private CardInfoPanel cardInfoPanel;
 
     private MonsterCard attackingMonster;
     private boolean toSwitch = false;
@@ -39,15 +40,13 @@ public class BoardFrame extends JFrame implements ActionListener {
     }
 
     private void setFramePrefrences() {
-        setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1367, 792);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
-        // setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-        // setUndecorated(true);
+        setLayout(new BorderLayout());
+        // Use full screen to ensure all panels fit, but allow user to resize
+        setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+        setResizable(true);
+        setLocationRelativeTo(null);
         setVisible(true);
-        setResizable(false);
     }
 
     private void initializeAttributes() {
@@ -58,6 +57,7 @@ public class BoardFrame extends JFrame implements ActionListener {
         opponentHandPanel.setPreferredSize(new Dimension(activeHandPanel.getPreferredSize().width, 15));
         westImagesPanel = new WestImagesPanel();
         eastButtonsPanel = new EastButtonsPanel();
+        cardInfoPanel = new CardInfoPanel();
         eastButtonsPanel.getRestartGameButton().addActionListener(e -> {
             dispose();
             Main.startNewGame();
@@ -65,25 +65,28 @@ public class BoardFrame extends JFrame implements ActionListener {
     }
 
     private void addPanels() {
-        setContentPane(new JLabel(new ImageIcon("images/background.jpg")));
-        JPanel dataPanel = new JPanel();
-        dataPanel.setLayout(new BorderLayout());
+        // Set a background image but keep a proper layout on the content pane
+        JLabel background = new JLabel(new ImageIcon("images/background.jpg"));
+        setContentPane(background);
+        ((JComponent) getContentPane()).setLayout(new BorderLayout());
+
+        JPanel dataPanel = new JPanel(new BorderLayout());
         dataPanel.setOpaque(false);
-        dataPanel.setSize(1366, 768);
+
         dataPanel.add(opponentHandPanel, BorderLayout.NORTH);
         dataPanel.add(fieldPanel, BorderLayout.CENTER);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT, 48, 0));
-        panel.add(westImagesPanel);
-        panel.add(activeHandPanel);
-        panel.setOpaque(true);
-        panel.setBackground(new Color(0, 0, 0, 0));
-        panel.setBorder(new EmptyBorder(0, 105, 0, 0));
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(westImagesPanel, BorderLayout.WEST);
+        panel.add(activeHandPanel, BorderLayout.CENTER);
+        panel.setOpaque(false);
+        panel.setBorder(new EmptyBorder(0, 10, 0, 0));
 
         dataPanel.add(panel, BorderLayout.SOUTH);
         dataPanel.add(eastButtonsPanel, BorderLayout.EAST);
-        add(dataPanel);
+        dataPanel.add(cardInfoPanel, BorderLayout.WEST);
+
+        getContentPane().add(dataPanel, BorderLayout.CENTER);
     }
 
     public FieldPanel getFieldPanel() {
@@ -124,6 +127,10 @@ public class BoardFrame extends JFrame implements ActionListener {
 
     public void setEastButtonsPanel(EastButtonsPanel eastButtonsPanel) {
         this.eastButtonsPanel = eastButtonsPanel;
+    }
+
+    public CardInfoPanel getCardInfoPanel() {
+        return cardInfoPanel;
     }
 
     public void updateBoardFrame() {
@@ -225,6 +232,11 @@ public class BoardFrame extends JFrame implements ActionListener {
     }
 
     public void openAnimationPanel(AnimationGIF animation) {
+        // Delegate to the overload without any callback
+        openAnimationPanel(animation, null);
+    }
+
+    public void openAnimationPanel(AnimationGIF animation, Runnable onClose) {
         // Hide the glass pane temporarily
         this.getGlassPane().setVisible(false);
 
@@ -315,6 +327,15 @@ public class BoardFrame extends JFrame implements ActionListener {
 
                 // Stop the timer
                 ((Timer) e.getSource()).stop();
+
+                // Invoke callback if provided
+                if (onClose != null) {
+                    try {
+                        onClose.run();
+                    } catch (Throwable t) {
+                        // Swallow to avoid breaking EDT
+                    }
+                }
             }
         });
 
