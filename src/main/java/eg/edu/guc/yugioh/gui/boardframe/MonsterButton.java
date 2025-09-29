@@ -2,6 +2,8 @@ package eg.edu.guc.yugioh.gui.boardframe;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -33,7 +35,16 @@ public class MonsterButton extends CardButton implements ActionListener{
 		this.monster = monster;
 		String monsterInfo = String.format("<html>%s<br>ATK: %d<br>DEF: %d<br>Level: %d</html>", monster.getName(), monster.getAttackPoints(), monster.getDefensePoints(), monster.getLevel());
 		setToolTipText(monsterInfo);
-		//setToolTipText("<html>"+monster.getName()+"<br>ATK: "+monster.getAttackPoints()+"<br>DEF: "+monster.getDefensePoints()+"<br>Level: "+monster.getLevel()+"</html>");
+		// Mantém tooltip no hover original
+		// Atualiza painel lateral ao passar o mouse e ao clicar
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (GUI.getBoardFrame() != null && GUI.getBoardFrame().getCardInfoPanel() != null) {
+					GUI.getBoardFrame().getCardInfoPanel().displayCardInfo(monster);
+				}
+			}
+		});
 		addActionListener(this);
 		validate();
 	}
@@ -46,6 +57,10 @@ public class MonsterButton extends CardButton implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 
 		Logger.logs().info("MonsterButton - actionPerformed ");
+		// Atualiza o painel lateral ao clicar
+		if (GUI.getBoardFrame() != null && GUI.getBoardFrame().getCardInfoPanel() != null) {
+			GUI.getBoardFrame().getCardInfoPanel().displayCardInfo(monster);
+		}
 
 		if(monster.getLocation() == Location.FIELD){
 			if(Card.getBoard().getActivePlayer().getField().getPhase()==Phase.BATTLE){

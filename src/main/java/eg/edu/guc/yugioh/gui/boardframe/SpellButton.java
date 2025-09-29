@@ -2,6 +2,8 @@ package eg.edu.guc.yugioh.gui.boardframe;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import eg.edu.guc.yugioh.cards.Card;
 import eg.edu.guc.yugioh.cards.Location;
@@ -23,7 +25,16 @@ public class SpellButton extends CardButton implements ActionListener{
 		this.spell = spell;
 		String spellInfo = String.format("<html><div>%s<br>%s</div></html>", spell.getName(), spell.getDescription());
 		setToolTipText(spellInfo);
-		//setToolTipText("<html>"+spell.getName()+"<br>"+spell.getDescription()+"</html>");
+		// Mantém tooltip
+		// Atualiza painel lateral ao passar o mouse
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (GUI.getBoardFrame() != null && GUI.getBoardFrame().getCardInfoPanel() != null) {
+					GUI.getBoardFrame().getCardInfoPanel().displayCardInfo(spell);
+				}
+			}
+		});
 		setVisible(true);
 		addActionListener(this);
 		validate();
@@ -31,6 +42,10 @@ public class SpellButton extends CardButton implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// Atualiza o painel lateral ao clicar
+		if (GUI.getBoardFrame() != null && GUI.getBoardFrame().getCardInfoPanel() != null) {
+			GUI.getBoardFrame().getCardInfoPanel().displayCardInfo(spell);
+		}
 		if(spell.getLocation()==Location.HAND)
 			new HandOptionsFrame(false,spell);
 		else 
