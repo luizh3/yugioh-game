@@ -65,28 +65,12 @@ public class BoardFrame extends JFrame implements ActionListener {
     }
 
     private void addPanels() {
-        // Set a background image but keep a proper layout on the content pane
-        JLabel background = new JLabel(new ImageIcon("images/background.jpg"));
-        setContentPane(background);
+
+        this.addDefaultBackground();
+
         ((JComponent) getContentPane()).setLayout(new BorderLayout());
 
-        JPanel dataPanel = new JPanel(new BorderLayout());
-        dataPanel.setOpaque(false);
-
-        dataPanel.add(opponentHandPanel, BorderLayout.NORTH);
-        dataPanel.add(fieldPanel, BorderLayout.CENTER);
-
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(westImagesPanel, BorderLayout.WEST);
-        panel.add(activeHandPanel, BorderLayout.CENTER);
-        panel.setOpaque(false);
-        panel.setBorder(new EmptyBorder(0, 10, 0, 0));
-
-        dataPanel.add(panel, BorderLayout.SOUTH);
-        dataPanel.add(eastButtonsPanel, BorderLayout.EAST);
-        dataPanel.add(cardInfoPanel, BorderLayout.WEST);
-
-        getContentPane().add(dataPanel, BorderLayout.CENTER);
+        getContentPane().add(this.createMainDataPanel(), BorderLayout.CENTER);
     }
 
     public FieldPanel getFieldPanel() {
@@ -333,5 +317,35 @@ public class BoardFrame extends JFrame implements ActionListener {
         // Start the timer (non-repeating)
         removalTimer.setRepeats(false);
         removalTimer.start();
+    }
+
+    private void addDefaultBackground() {
+        JLabel background = new JLabel(new ImageIcon("images/background.jpg"));
+        setContentPane(background);
+    }
+
+    private JPanel createMainDataPanel() {
+        JPanel dataPanel = new JPanel(new BorderLayout());
+        dataPanel.setOpaque(false);
+
+        dataPanel.add(opponentHandPanel, BorderLayout.NORTH);
+        dataPanel.add(fieldPanel, BorderLayout.CENTER);
+
+        dataPanel.add(this.createSidePanel(), BorderLayout.SOUTH);
+        dataPanel.add(eastButtonsPanel, BorderLayout.EAST);
+        dataPanel.add(cardInfoPanel, BorderLayout.WEST);
+
+        return dataPanel;
+    }
+
+    private JPanel createSidePanel() {
+        JPanel sidePanel = new JPanel(new BorderLayout());
+
+        sidePanel.add(westImagesPanel, BorderLayout.WEST);
+        sidePanel.add(activeHandPanel, BorderLayout.CENTER);
+        sidePanel.setOpaque(false);
+        sidePanel.setBorder(new EmptyBorder(0, 10, 0, 0));
+
+        return sidePanel;
     }
 }
