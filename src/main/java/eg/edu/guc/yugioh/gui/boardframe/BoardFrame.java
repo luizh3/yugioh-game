@@ -12,7 +12,6 @@ import eg.edu.guc.yugioh.gui.otherframes.AnimationPanel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class BoardFrame extends JFrame implements ActionListener {
@@ -26,10 +25,8 @@ public class BoardFrame extends JFrame implements ActionListener {
     private MonsterCard attackingMonster;
     private boolean toSwitch = false;
     private SpellCard spellToActivate;
-    private boolean sacrificeAttack;
-    private ArrayList<MonsterCard> sacrificedMonsters = new ArrayList<MonsterCard>();
-    private int sacrificesCount;
-    private MonsterCard monsterToSummon;
+
+    private SummonSacrificeRitualManager summonSacrificeRitualManager;
 
     public BoardFrame() {
         super("Yu-Gi-Oh!");
@@ -62,6 +59,8 @@ public class BoardFrame extends JFrame implements ActionListener {
             dispose();
             Main.startNewGame();
         });
+
+        summonSacrificeRitualManager = new SummonSacrificeRitualManager();
     }
 
     private void addPanels() {
@@ -144,42 +143,6 @@ public class BoardFrame extends JFrame implements ActionListener {
         this.spellToActivate = spellToActivate;
     }
 
-    public int getSacrificesCount() {
-        return sacrificesCount;
-    }
-
-    public void setSacrificesCount(int sacrificesCount) {
-        this.sacrificesCount = sacrificesCount;
-    }
-
-    public void decrementSacrificesCount() {
-        this.sacrificesCount--;
-    }
-
-    public boolean isSacrificeAttack() {
-        return sacrificeAttack;
-    }
-
-    public void setSacrificeAttack(boolean sacrificeAttack) {
-        this.sacrificeAttack = sacrificeAttack;
-    }
-
-    public ArrayList<MonsterCard> getSacrificedMonsters() {
-        return sacrificedMonsters;
-    }
-
-    public void setSacrificedMonsters(ArrayList<MonsterCard> sacrificedMonsters) {
-        this.sacrificedMonsters = sacrificedMonsters;
-    }
-
-    public MonsterCard getMonsterToSummon() {
-        return monsterToSummon;
-    }
-
-    public void setMonsterToSummon(MonsterCard monsterToSummon) {
-        this.monsterToSummon = monsterToSummon;
-    }
-
     public MonsterCard getAttackingMonster() {
         return attackingMonster;
     }
@@ -195,10 +158,8 @@ public class BoardFrame extends JFrame implements ActionListener {
         attackingMonster = null;
         toSwitch = false;
         spellToActivate = null;
-        sacrificeAttack = false;
-        sacrificedMonsters = new ArrayList<MonsterCard>();
-        sacrificesCount = 0;
-        monsterToSummon = null;
+
+        this.summonSacrificeRitualManager.reset();
     }
 
     @Override
@@ -347,5 +308,21 @@ public class BoardFrame extends JFrame implements ActionListener {
         sidePanel.setBorder(new EmptyBorder(0, 10, 0, 0));
 
         return sidePanel;
+    }
+
+    public void startRitualSummon(MonsterCard monsterToSummon, boolean isToSummonInAttackMode) throws Exception {
+        this.summonSacrificeRitualManager.startRitual(monsterToSummon, isToSummonInAttackMode);
+    }
+
+    public void sacrificeMonster(MonsterCard monsterToSacrifice) {
+        this.summonSacrificeRitualManager.sacrificeMonster(monsterToSacrifice);
+    }
+
+    public boolean isSummoningSacrificeMonster(){
+        return this.summonSacrificeRitualManager.isSummoningSacrificeMonster();
+    }
+
+    public void resetMonsterToSummon(){
+        this.summonSacrificeRitualManager.setMonsterToSummon(null);
     }
 }

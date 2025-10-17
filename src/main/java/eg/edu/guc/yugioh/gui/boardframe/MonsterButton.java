@@ -71,7 +71,7 @@ public class MonsterButton extends CardButton implements ActionListener{
 					switchMonsterModeAction();
 				}
 			}
-			if(GUI.getBoardFrame().getMonsterToSummon() != null){
+			if(GUI.getBoardFrame().isSummoningSacrificeMonster()){
 				sacrificesAction();
 			}
 			if(GUI.getBoardFrame().getSpellToActivate() != null){
@@ -100,27 +100,7 @@ public class MonsterButton extends CardButton implements ActionListener{
 	}
 
 	private void sacrificesAction() {
-		if(GUI.getBoardFrame().getSacrificesCount() >0){
-			if(!GUI.getBoardFrame().getSacrificedMonsters().contains(monster)){
-				GUI.getBoardFrame().getSacrificedMonsters().add(monster);
-				GUI.getBoardFrame().decrementSacrificesCount();
-			} // bug needed brackets 
-		}
-
-		if(GUI.getBoardFrame().getSacrificesCount() == 0){
-			try{
-				if(GUI.getBoardFrame().isSacrificeAttack())
-					Card.getBoard().getActivePlayer().summonMonster(GUI.getBoardFrame().getMonsterToSummon(),GUI.getBoardFrame().getSacrificedMonsters());
-				else 
-					Card.getBoard().getActivePlayer().setMonster(GUI.getBoardFrame().getMonsterToSummon(),GUI.getBoardFrame().getSacrificedMonsters());
-				GUI.getBoardFrame().setMonsterToSummon(null);
-			}catch(Exception e){
-				GUI.errorFrame(e);
-			}
-			finally{ // added the finally
-				GUI.getBoardFrame().setSacrificedMonsters(new ArrayList<MonsterCard>());
-			}
-		}
+        GUI.getBoardFrame().sacrificeMonster(monster);
 	}
 
 	private void battlePhaseActions() {
