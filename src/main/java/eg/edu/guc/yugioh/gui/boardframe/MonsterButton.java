@@ -62,7 +62,7 @@ public class MonsterButton extends CardButton implements ActionListener{
 			GUI.getBoardFrame().getCardInfoPanel().displayCardInfo(monster);
 		}
 
-		if(this.isCardInField()){
+		if(this.monster.isCardInField()){
 			if(Card.getBoard().getActivePlayer().getField().getPhase()==Phase.BATTLE){
 				battlePhaseActions();
 				return;
@@ -80,7 +80,7 @@ public class MonsterButton extends CardButton implements ActionListener{
 			GUI.getBoardFrame().updateBoardFrame();
 		}
 
-		if(this.isCardInHand()){
+		if(this.monster.isCardInHand()){
 			new HandOptionsFrame(true,monster);
 		}
 	}
@@ -149,12 +149,4 @@ public class MonsterButton extends CardButton implements ActionListener{
 		}
 		GUI.getBoardFrame().updateBoardFrame();
 	}
-
-    private boolean isCardInHand(){
-        return monster.getLocation()==Location.HAND && Card.getBoard().getActivePlayer().getField().getHand().contains(monster);
-    }
-
-    private boolean isCardInField(){
-        return monster.getLocation()==Location.FIELD;
-    }
 }
