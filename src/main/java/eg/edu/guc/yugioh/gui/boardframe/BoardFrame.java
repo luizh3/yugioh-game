@@ -139,16 +139,7 @@ public class BoardFrame extends JFrame implements ActionListener {
 
         activeHandPanel.updateHand();
         opponentHandPanel.updateHand();
-        fieldPanel.getActivePlayerPanel().getDeckGraveyardPanel().getDeck().updateDeck();
-        fieldPanel.getOpponentPlayerPanel().getDeckGraveyardPanel().getDeck().updateDeck();
-        fieldPanel.getActivePlayerPanel().getDeckGraveyardPanel().getGraveyard().updateGraveyard();
-        fieldPanel.getOpponentPlayerPanel().getDeckGraveyardPanel().getGraveyard().updateGraveyard();
-        fieldPanel.getActivePlayerPanel().getMonsterSpellPanel().getMonstersGrid().updateMonstersArea();
-        fieldPanel.getOpponentPlayerPanel().getMonsterSpellPanel().getMonstersGrid().updateMonstersArea();
-        fieldPanel.getActivePlayerPanel().getMonsterSpellPanel().getSpellsGrid().updateSpellsArea();
-        fieldPanel.getOpponentPlayerPanel().getMonsterSpellPanel().getSpellsGrid().updateSpellsArea();
-        fieldPanel.getActivePlayerPanel().getPlayerNamePanel().updateLifePoints();
-        fieldPanel.getOpponentPlayerPanel().getPlayerNamePanel().updateLifePoints();
+        fieldPanel.updateAllPanels();
         repaint();
         validate();
     }
