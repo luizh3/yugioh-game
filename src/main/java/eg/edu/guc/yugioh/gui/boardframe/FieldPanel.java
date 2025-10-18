@@ -41,4 +41,9 @@ public class FieldPanel extends JPanel {
 	public void setOpponentPlayerPanel(PlayerAreaPanel opponentPlayerPanel) {
 		this.opponentPlayerPanel = opponentPlayerPanel;
 	}
+
+    public void updateAllPanels () {
+        this.getActivePlayerPanel().updateAllPanels();
+        this.getOpponentPlayerPanel().updateAllPanels();
+    }
 }

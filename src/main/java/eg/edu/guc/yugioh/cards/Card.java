@@ -64,4 +64,12 @@ public abstract class Card {
 
 	}
 
+    public boolean isCardInHand(){
+        return this.getLocation()==Location.HAND && Card.getBoard().getActivePlayer().getField().getHand().contains(this);
+    }
+
+    public boolean isCardInField(){
+        return this.getLocation()==Location.FIELD;
+    }
+
 }

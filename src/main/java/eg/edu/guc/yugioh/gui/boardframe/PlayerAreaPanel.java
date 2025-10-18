@@ -85,4 +85,13 @@ public class PlayerAreaPanel extends JPanel {
 	public void setPlayerNamePanel(PlayerNamePanel playerNamePanel) {
 		this.playerNamePanel = playerNamePanel;
 	}
+
+    public void updateAllPanels() {
+        this.getDeckGraveyardPanel().getDeck().updateDeck();
+        this.getDeckGraveyardPanel().getGraveyard().updateGraveyard();
+        this.getMonsterSpellPanel().getMonstersGrid().updateMonstersArea();
+        this.getMonsterSpellPanel().getSpellsGrid().updateSpellsArea();
+        this.getPlayerNamePanel().updateLifePoints();
+    }
+
 }

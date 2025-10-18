@@ -12,7 +12,6 @@ import eg.edu.guc.yugioh.gui.otherframes.AnimationPanel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class BoardFrame extends JFrame implements ActionListener {
@@ -26,10 +25,8 @@ public class BoardFrame extends JFrame implements ActionListener {
     private MonsterCard attackingMonster;
     private boolean toSwitch = false;
     private SpellCard spellToActivate;
-    private boolean sacrificeAttack;
-    private ArrayList<MonsterCard> sacrificedMonsters = new ArrayList<MonsterCard>();
-    private int sacrificesCount;
-    private MonsterCard monsterToSummon;
+
+    private SummonSacrificeRitualManager summonSacrificeRitualManager;
 
     public BoardFrame() {
         super("Yu-Gi-Oh!");
@@ -62,31 +59,17 @@ public class BoardFrame extends JFrame implements ActionListener {
             dispose();
             Main.startNewGame();
         });
+
+        summonSacrificeRitualManager = new SummonSacrificeRitualManager();
     }
 
     private void addPanels() {
-        // Set a background image but keep a proper layout on the content pane
-        JLabel background = new JLabel(new ImageIcon("images/background.jpg"));
-        setContentPane(background);
+
+        this.addDefaultBackground();
+
         ((JComponent) getContentPane()).setLayout(new BorderLayout());
 
-        JPanel dataPanel = new JPanel(new BorderLayout());
-        dataPanel.setOpaque(false);
-
-        dataPanel.add(opponentHandPanel, BorderLayout.NORTH);
-        dataPanel.add(fieldPanel, BorderLayout.CENTER);
-
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(westImagesPanel, BorderLayout.WEST);
-        panel.add(activeHandPanel, BorderLayout.CENTER);
-        panel.setOpaque(false);
-        panel.setBorder(new EmptyBorder(0, 10, 0, 0));
-
-        dataPanel.add(panel, BorderLayout.SOUTH);
-        dataPanel.add(eastButtonsPanel, BorderLayout.EAST);
-        dataPanel.add(cardInfoPanel, BorderLayout.WEST);
-
-        getContentPane().add(dataPanel, BorderLayout.CENTER);
+        getContentPane().add(this.createMainDataPanel(), BorderLayout.CENTER);
     }
 
     public FieldPanel getFieldPanel() {
@@ -139,16 +122,7 @@ public class BoardFrame extends JFrame implements ActionListener {
 
         activeHandPanel.updateHand();
         opponentHandPanel.updateHand();
-        fieldPanel.getActivePlayerPanel().getDeckGraveyardPanel().getDeck().updateDeck();
-        fieldPanel.getOpponentPlayerPanel().getDeckGraveyardPanel().getDeck().updateDeck();
-        fieldPanel.getActivePlayerPanel().getDeckGraveyardPanel().getGraveyard().updateGraveyard();
-        fieldPanel.getOpponentPlayerPanel().getDeckGraveyardPanel().getGraveyard().updateGraveyard();
-        fieldPanel.getActivePlayerPanel().getMonsterSpellPanel().getMonstersGrid().updateMonstersArea();
-        fieldPanel.getOpponentPlayerPanel().getMonsterSpellPanel().getMonstersGrid().updateMonstersArea();
-        fieldPanel.getActivePlayerPanel().getMonsterSpellPanel().getSpellsGrid().updateSpellsArea();
-        fieldPanel.getOpponentPlayerPanel().getMonsterSpellPanel().getSpellsGrid().updateSpellsArea();
-        fieldPanel.getActivePlayerPanel().getPlayerNamePanel().updateLifePoints();
-        fieldPanel.getOpponentPlayerPanel().getPlayerNamePanel().updateLifePoints();
+        fieldPanel.updateAllPanels();
         repaint();
         validate();
     }
@@ -169,42 +143,6 @@ public class BoardFrame extends JFrame implements ActionListener {
         this.spellToActivate = spellToActivate;
     }
 
-    public int getSacrificesCount() {
-        return sacrificesCount;
-    }
-
-    public void setSacrificesCount(int sacrificesCount) {
-        this.sacrificesCount = sacrificesCount;
-    }
-
-    public void decrementSacrificesCount() {
-        this.sacrificesCount--;
-    }
-
-    public boolean isSacrificeAttack() {
-        return sacrificeAttack;
-    }
-
-    public void setSacrificeAttack(boolean sacrificeAttack) {
-        this.sacrificeAttack = sacrificeAttack;
-    }
-
-    public ArrayList<MonsterCard> getSacrificedMonsters() {
-        return sacrificedMonsters;
-    }
-
-    public void setSacrificedMonsters(ArrayList<MonsterCard> sacrificedMonsters) {
-        this.sacrificedMonsters = sacrificedMonsters;
-    }
-
-    public MonsterCard getMonsterToSummon() {
-        return monsterToSummon;
-    }
-
-    public void setMonsterToSummon(MonsterCard monsterToSummon) {
-        this.monsterToSummon = monsterToSummon;
-    }
-
     public MonsterCard getAttackingMonster() {
         return attackingMonster;
     }
@@ -220,10 +158,8 @@ public class BoardFrame extends JFrame implements ActionListener {
         attackingMonster = null;
         toSwitch = false;
         spellToActivate = null;
-        sacrificeAttack = false;
-        sacrificedMonsters = new ArrayList<MonsterCard>();
-        sacrificesCount = 0;
-        monsterToSummon = null;
+
+        this.summonSacrificeRitualManager.reset();
     }
 
     @Override
@@ -342,5 +278,51 @@ public class BoardFrame extends JFrame implements ActionListener {
         // Start the timer (non-repeating)
         removalTimer.setRepeats(false);
         removalTimer.start();
+    }
+
+    private void addDefaultBackground() {
+        JLabel background = new JLabel(new ImageIcon("images/background.jpg"));
+        setContentPane(background);
+    }
+
+    private JPanel createMainDataPanel() {
+        JPanel dataPanel = new JPanel(new BorderLayout());
+        dataPanel.setOpaque(false);
+
+        dataPanel.add(opponentHandPanel, BorderLayout.NORTH);
+        dataPanel.add(fieldPanel, BorderLayout.CENTER);
+
+        dataPanel.add(this.createSidePanel(), BorderLayout.SOUTH);
+        dataPanel.add(eastButtonsPanel, BorderLayout.EAST);
+        dataPanel.add(cardInfoPanel, BorderLayout.WEST);
+
+        return dataPanel;
+    }
+
+    private JPanel createSidePanel() {
+        JPanel sidePanel = new JPanel(new BorderLayout());
+
+        sidePanel.add(westImagesPanel, BorderLayout.WEST);
+        sidePanel.add(activeHandPanel, BorderLayout.CENTER);
+        sidePanel.setOpaque(false);
+        sidePanel.setBorder(new EmptyBorder(0, 10, 0, 0));
+
+        return sidePanel;
+    }
+
+    public void startRitualSummon(MonsterCard monsterToSummon, boolean isToSummonInAttackMode) throws Exception {
+        this.summonSacrificeRitualManager.startRitual(monsterToSummon, isToSummonInAttackMode);
+    }
+
+    public void sacrificeMonster(MonsterCard monsterToSacrifice) {
+        this.summonSacrificeRitualManager.sacrificeMonster(monsterToSacrifice);
+    }
+
+    public boolean isSummoningSacrificeMonster(){
+        return this.summonSacrificeRitualManager.isSummoningSacrificeMonster();
+    }
+
+    public void resetMonsterToSummon(){
+        this.summonSacrificeRitualManager.setMonsterToSummon(null);
     }
 }

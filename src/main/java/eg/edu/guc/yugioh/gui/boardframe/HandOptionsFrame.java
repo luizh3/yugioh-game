@@ -149,11 +149,11 @@ public class HandOptionsFrame extends JFrame implements ActionListener {
                     if (spell instanceof ChangeOfHeart || spell instanceof MagePower) {
                         new ConfirmFrame("Please click a monster to activate on");
                         GUI.getBoardFrame().setSpellToActivate(spell);
-                        GUI.getBoardFrame().setMonsterToSummon(null);
+                        GUI.getBoardFrame().resetMonsterToSummon();
                     } else {
                         Card.getBoard().getActivePlayer().activateSpell(spell, null);
                         GUI.getBoardFrame().setSpellToActivate(null);
-                        GUI.getBoardFrame().setMonsterToSummon(null);
+                        GUI.getBoardFrame().resetMonsterToSummon();
                     }
                 } catch (Exception ex) {
                     GUI.errorFrame(ex);
@@ -166,7 +166,7 @@ public class HandOptionsFrame extends JFrame implements ActionListener {
 
     private void handleSetSpell() throws Exception {
         Card.getBoard().getActivePlayer().setSpell(spell);
-        GUI.getBoardFrame().setMonsterToSummon(null);
+        GUI.getBoardFrame().resetMonsterToSummon();
         GUI.getBoardFrame().setSpellToActivate(null);
     }
 
@@ -178,7 +178,7 @@ public class HandOptionsFrame extends JFrame implements ActionListener {
             } else {
                 Card.getBoard().getActivePlayer().setMonster(monster);
             }
-            GUI.getBoardFrame().setMonsterToSummon(null);
+            GUI.getBoardFrame().resetMonsterToSummon();
         } else {
             ritualSummon(isSummon);
         }
@@ -186,15 +186,6 @@ public class HandOptionsFrame extends JFrame implements ActionListener {
     }
 
     private void ritualSummon(boolean isAttackMode) throws Exception {
-        int sacrificesNeeded = monster.getLevel() < 7 ? 1 : 2;
-        GUI.getBoardFrame().setSacrificesCount(sacrificesNeeded);
-
-        if (Card.getBoard().getActivePlayer().getField().getMonstersArea().size() >= sacrificesNeeded) {
-            new ConfirmFrame("Please click " + sacrificesNeeded + " monster(s) to sacrifice");
-            GUI.getBoardFrame().setMonsterToSummon(monster);
-            GUI.getBoardFrame().setSacrificeAttack(isAttackMode);
-        } else {
-            throw new Exception("You don't have enough sacrifices.");
-        }
+        GUI.getBoardFrame().startRitualSummon(monster, isAttackMode);
     }
 }
